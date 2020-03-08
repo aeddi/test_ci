@@ -52,6 +52,11 @@ jobs:
           ios_example.md,
         ]
     steps:
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+            ref: master
+
       - name: Checkout changes
         uses: actions/checkout@v2
 
