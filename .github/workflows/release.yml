@@ -21,8 +21,12 @@ jobs:
 
       - name: Set PREV_VERSION
         run: |
+          echo "git remote"
           git remote -v
+          echo "git branch"
           git branch -a
+          echo "git log"
+          git log
           git pull origin master
           git checkout master -- packages/Manifest.yml
           export GET_BIN=packages/utils/yaml_get/yaml_get.py
