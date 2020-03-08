@@ -73,7 +73,7 @@ jobs:
         run:
           export RN=${{ matrix.files }};
           export RN_VERSION=$(grep '^## ' $RN | head -n1 | cut -d' ' -f2);
-          git branch -a
+          git branch -a;
           if [[ "$RN_VERSION" != "$CUR_VERSION" ]]; then
             echo "Last version mismatch for $RN"; exit 1;
           elif [[ -z "$(git diff master -- $RN )" ]]; then
