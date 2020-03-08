@@ -26,17 +26,9 @@ jobs:
 
       - name: Set PREV_VERSION
         run: |
-          echo "git remote"
-          git remote -v
-          echo "git branch"
-          git branch -a
-          echo "git log"
-          git log
-          echo "git checkout"
-          git checkout master -- packages/Manifest.yml
           export GET_BIN=packages/utils/yaml_get/yaml_get.py
           export GET_KEY=global.version
-          echo "##[set-env name=CUR_VERSION;]$($GET_BIN $GET_KEY)"
+          echo "##[set-env name=PREV_VERSION;]$($GET_BIN $GET_KEY)"
 
       - name: Check version change
         run:
