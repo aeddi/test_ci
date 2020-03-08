@@ -79,8 +79,8 @@ jobs:
 #           make publish_core.ios
 #           make publish_bridge.ios
 
-  publish:
-    name: Publish Bridge and Core
+  tag_branch:
+    name: Publish version tag
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
