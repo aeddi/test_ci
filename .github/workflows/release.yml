@@ -19,6 +19,11 @@ jobs:
           export GET_KEY=global.version
           echo "##[set-env name=CUR_VERSION;]$($GET_BIN $GET_KEY)"
 
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+            ref: master
+
       - name: Set PREV_VERSION
         run: |
           echo "git remote"
@@ -27,7 +32,7 @@ jobs:
           git branch -a
           echo "git log"
           git log
-          git pull origin master
+          echo "git checkout"
           git checkout master -- packages/Manifest.yml
           export GET_BIN=packages/utils/yaml_get/yaml_get.py
           export GET_KEY=global.version
