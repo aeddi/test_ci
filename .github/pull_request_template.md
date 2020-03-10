@@ -11,6 +11,8 @@
 	- addresses #1337
 -->
 
+- None
+
 ## Changelog
 
 <!-- This section is used by the CI to generate the changelog.
