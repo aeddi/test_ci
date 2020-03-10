@@ -13,12 +13,11 @@ jobs:
         run: |
             sudo apt-get install jq
             export BODY=$(cat ${{ github.event_path }} | jq .pull_request.body)
-            export CLOG=$(echo $BODY | sed -ne '/^## Changelog$/,$ p')
+            echo "BODY:\n$BODY"
+            export CLOG=$(echo "$BODY" | sed -ne '/^## Changelog$/,$ p')
+            echo "BODY:\n$CLOG"
             if [[ -z "$CLOG" ]]; then echo "[Error] empty changelog"; exit 1; fi
             echo "##[set-env name=CHANGELOG;]$CLOG"
-
-      - name: Display CHANGELOG
-        run: echo "Changelog\n$CHANGELOG"
 
       - name: Lint changelog
         run: |
