@@ -13,9 +13,9 @@ jobs:
         run: |
             sudo apt-get install jq
             export BODY=$(cat ${{ github.event_path }} | jq .pull_request.body)
-            echo "BODY:\n$BODY"
-            export CLOG=$(echo "$BODY" | sed -ne '/^## Changelog$/,$ p')
-            echo "BODY:\n$CLOG"
+            echo -e "BODY:\n$BODY"
+            export CLOG=$(echo -e "$BODY" | sed -ne '/^## Changelog$/,$ p')
+            echo -e "CLOG:\n$CLOG"
             if [[ -z "$CLOG" ]]; then echo "[Error] empty changelog"; exit 1; fi
             echo "##[set-env name=CHANGELOG;]$CLOG"
 
@@ -27,29 +27,29 @@ jobs:
 
       - name: Check changelog subsections
         run:
-          CHANGELOG_NC=$(echo "$CHANGELOG" | sed '/<!--/,/-->/d');
-          echo "$CHANGELOG_NC";
-          if [[ -z $(echo "$CHANGELOG_NC" |
+          CHANGELOG_NC=$(echo -e "$CHANGELOG" | sed '/<!--/,/-->/d');
+          echo "CHANGELOG_NC:\n$CHANGELOG_NC";
+          if [[ -z $(echo -e "$CHANGELOG_NC" |
           sed -n '/^### Android Bridge$/,/^### iOS Bridge$/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Android Bridge section"; exit 1;
           fi;
-          if [[ -z $(echo "$CHANGELOG_NC" |
+          if [[ -z $(echo -e "$CHANGELOG_NC" |
           sed -n '/^### iOS Bridge$/,/^### Golang Core$/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty iOS Bridge section"; exit 1;
           fi;
-          if [[ -z $(echo "$CHANGELOG_NC" |
+          if [[ -z $(echo -e "$CHANGELOG_NC" |
           sed -n '/^### Golang Core$/,/^### Android Demo App$/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Golang Core section"; exit 1;
           fi;
-          if [[ -z $(echo "$CHANGELOG_NC" |
+          if [[ -z $(echo -e "$CHANGELOG_NC" |
           sed -n '/^### Android Demo App$/,/^### iOS Demo App$/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Android Demo App section"; exit 1;
           fi;
-          if [[ -z $(echo "$CHANGELOG_NC" |
+          if [[ -z $(echo -e "$CHANGELOG_NC" |
           sed -e '1,/^### iOS Demo App$/ d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty iOS Demo App section"; exit 1;
           fi;
