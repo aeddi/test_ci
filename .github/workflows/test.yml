@@ -21,7 +21,7 @@ jobs:
 
       - name: Lint changelog
         run: |
-            echo "# First" > /tmp/changelog_lint
+            echo -e "# First\n" > /tmp/changelog_lint
             cat /tmp/changelog >> /tmp/changelog_lint
             echo "FIRST"; cat /tmp/changelog_lint; echo "LAST"
             sudo npm install -g markdownlint-cli
