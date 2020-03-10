@@ -12,5 +12,10 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
-      - name: Cat github.event_path
-        run: cat ${{ github.event_path }}
+      - name: Set PR_BODY
+        run: |
+            sudo apt-get install jq
+            export RES=$(cat ${{ github.event_path }} | jq .pull_request.body)
+            echo "##[set-env name=PR_BODY;]$RES"
+- name: Display PR_BODY
+        run: echo "$PR_BODY"
