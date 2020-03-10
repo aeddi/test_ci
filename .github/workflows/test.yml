@@ -23,8 +23,10 @@ jobs:
 
       - name: Lint changelog
         run: |
+            echo -e "# First\n" > /tmp/changelog_lint
+            cat /tmp/changelog >> /tmp/changelog_lint
             sudo npm install -g markdownlint-cli
-            markdownlint /tmp/changelog
+            markdownlint /tmp/changelog_lint
 
       - name: Check changelog subsections
         run:
