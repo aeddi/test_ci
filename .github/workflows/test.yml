@@ -14,7 +14,7 @@ jobs:
             sudo apt-get install jq
             export BODY=$(cat ${{ github.event_path }} | jq .pull_request.body)
             echo -e "BODY:\n$BODY"
-            export CLOG=$(echo -e "$BODY" | sed -ne '/^## Changelog$/,$ p')
+            export CLOG=$(echo -e "$BODY" | sed -ne '/## Changelog/,$ p')
             echo -e "CLOG:\n$CLOG"
             if [[ -z "$CLOG" ]]; then echo "[Error] empty changelog"; exit 1; fi
             echo "##[set-env name=CHANGELOG;]$CLOG"
