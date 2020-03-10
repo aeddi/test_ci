@@ -62,7 +62,7 @@ public class Node {
         }
     }
 
-    /// Serves node API over UDS
+    /// Serves node API over TCP
     /// - Parameter onTCPPort: The TCP port to serve on
     /// - Throws: `NodeError`: If the node failed to serve
     /// - Returns: The TCP/IP MultiAddr the node is serving on

@@ -31,7 +31,7 @@ publishing {
 
 			groupId manifest.global.android.group_id
 			artifactId manifest.android_bridge.artifact_id
-			version manifest.global.version
+			version rootProject.ext.version
 
             pom {
                 name = manifest.android_bridge.name
@@ -107,10 +107,10 @@ bintray {
         }
 
         version {
-            name = manifest.global.version
-            desc = "${manifest.global.android.repo}-${manifest.android_bridge.artifact_id }-${manifest.global.version}"
+            name = rootProject.ext.version
+            desc = "$manifest.global.android.repo-$manifest.android_bridge.artifact_id-$rootProject.ext.version"
             released = new Date()
-            vcsTag = "v$manifest.global.version"
+            vcsTag = "v$rootProject.ext.version"
 
             gpg {
                 sign = true

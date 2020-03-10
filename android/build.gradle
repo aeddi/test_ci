@@ -11,9 +11,11 @@ buildscript {
 
 task importManifest {
     def ManifestFile = new File("${rootDir.getPath()}/../packages/Manifest.yml")
+	def EnvVersion = System.env['GOMOBILE_IPFS_VERSION']
 
     rootProject.ext {
         manifest = new org.yaml.snakeyaml.Yaml().load(ManifestFile.newInputStream())
+		version = (EnvVersion != null) ? EnvVersion : 'dev'
     }
 }
 

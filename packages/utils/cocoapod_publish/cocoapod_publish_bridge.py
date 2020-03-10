@@ -44,10 +44,15 @@ try:
     download_count = manifest["ios_bridge"]["public_download_numbers"]
     readme_content = manifest["ios_bridge"]["readme_content"]
     readme_syntax = manifest["ios_bridge"]["readme_syntax"]
-    global_version = manifest["global"]["version"]
     bridge_name = manifest["ios_bridge"]["name"]
     publish = manifest["ios_bridge"]["publish"]
     override = manifest["ios_bridge"]["override"]
+
+    # Get version from env (CI) or set to dev
+    if "GOMOBILE_IPFS_VERSION" in os.environ:
+        global_version = os.getenv("GOMOBILE_IPFS_VERSION")
+    else:
+        global_version = "dev"
 
     # Check if remote package already exists
     package = bintray.search_package(
