@@ -44,10 +44,15 @@ try:
     download_count = manifest["go_core"]["ios"]["public_download_numbers"]
     readme_content = manifest["go_core"]["ios"]["readme_content"]
     readme_syntax = manifest["go_core"]["ios"]["readme_syntax"]
-    global_version = manifest["global"]["version"]
     core_name = manifest["go_core"]["ios"]["name"]
     publish = manifest["go_core"]["ios"]["publish"]
     override = manifest["go_core"]["ios"]["override"]
+
+    # Get version from env (CI) or set to dev
+    if "GOMOBILE_IPFS_VERSION" in os.environ:
+        global_version = os.getenv("GOMOBILE_IPFS_VERSION")
+    else:
+        global_version = "dev"
 
     # Check if remote package already exists
     package = bintray.search_package(

@@ -18,7 +18,6 @@ try:
 
     target_sdk = manifest["global"]["android"]["target_sdk_version"]
     artifact_id = manifest["go_core"]["android"]["artifact_id"]
-    global_version = manifest["global"]["version"]
     group_id = manifest["global"]["android"]["group_id"]
     packaging = manifest["global"]["android"]["packaging"]
     core_name = manifest["go_core"]["android"]["name"]
@@ -29,6 +28,12 @@ try:
     scm_conn = manifest["global"]["android"]["scm"]["connection"]
     scm_dev_conn = manifest["global"]["android"]["scm"]["developer_connection"]
     scm_url = manifest["global"]["android"]["scm"]["url"]
+
+    # Get version from env (CI) or set to dev
+    if "GOMOBILE_IPFS_VERSION" in os.environ:
+        global_version = os.getenv("GOMOBILE_IPFS_VERSION")
+    else:
+        global_version = "dev"
 
     # Check if ANDROID_HOME is set in env
     if "ANDROID_HOME" not in os.environ:

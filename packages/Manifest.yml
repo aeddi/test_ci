@@ -1,7 +1,5 @@
 ---
 global:
-  version: 0.0.2
-
   github:
     repo: ipfs-shipyard/gomobile-ipfs
     url: https://github.com/ipfs-shipyard/gomobile-ipfs

@@ -15,7 +15,6 @@ try:
         manifest = yaml.safe_load(stream)
 
     bridge_name = manifest["ios_bridge"]["name"]
-    global_version = manifest["global"]["version"]
     description = manifest["ios_bridge"]["summary"]
     website = manifest["global"]["github"]["url"]
     platform = manifest["global"]["ios"]["platform"]
@@ -26,6 +25,12 @@ try:
     header_dir = manifest["ios_bridge"]["import_name"]
     licenses = manifest["global"]["licenses"]
     developers = manifest["global"]["developers"]
+
+    # Get version from env (CI) or set to dev
+    if "GOMOBILE_IPFS_VERSION" in os.environ:
+        global_version = os.getenv("GOMOBILE_IPFS_VERSION")
+    else:
+        global_version = "dev"
 
     # Create temporary working directory
     with TemporaryDirectory() as temp_dir:

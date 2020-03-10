@@ -15,7 +15,6 @@ try:
         manifest = yaml.safe_load(stream)
 
     core_name = manifest["go_core"]["ios"]["name"]
-    global_version = manifest["global"]["version"]
     description = manifest["go_core"]["ios"]["summary"]
     website = manifest["global"]["github"]["url"]
     platform = manifest["global"]["ios"]["platform"]
@@ -23,6 +22,12 @@ try:
     bintray_package = manifest["go_core"]["ios"]["package"]
     licenses = manifest["global"]["licenses"]
     developers = manifest["global"]["developers"]
+
+    # Get version from env (CI) or set to dev
+    if "GOMOBILE_IPFS_VERSION" in os.environ:
+        global_version = os.getenv("GOMOBILE_IPFS_VERSION")
+    else:
+        global_version = "dev"
 
     # Create temporary working directory
     with TemporaryDirectory() as temp_dir:
