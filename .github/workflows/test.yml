@@ -39,23 +39,23 @@ jobs:
           fi;
 
           if [[ -z $(cat /tmp/changelog_nc |
-          sed -n '/^### iOS Bridge$/,/^### Golang Core$/p' |
+          sed -n '/^### iOS Bridge/,/^### Golang Core/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty iOS Bridge section"; exit 1;
           fi;
           if [[ -z $(cat /tmp/changelog_nc |
-          sed -n '/^### Golang Core$/,/^### Android Demo App$/p' |
+          sed -n '/^### Golang Core/,/^### Android Demo App/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Golang Core section"; exit 1;
           fi;
 
           if [[ -z $(cat /tmp/changelog_nc |
-          sed -n '/^### Android Demo App$/,/^### iOS Demo App$/p' |
+          sed -n '/^### Android Demo App/,/^### iOS Demo App/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Android Demo App section"; exit 1;
           fi;
 
           if [[ -z $(cat /tmp/changelog_nc |
-          sed -e '1,/^### iOS Demo App$/ d' | tr -d '[:space:]') ]]; then
+          sed -e '1,/^### iOS Demo App/ d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty iOS Demo App section"; exit 1;
           fi;
