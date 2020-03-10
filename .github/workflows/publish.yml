@@ -79,24 +79,24 @@ jobs:
 #           make publish_core.ios
 #           make publish_bridge.ios
 
-  tag_branch:
-    name: Publish version tag
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Checkout changes
-        uses: actions/checkout@v2
+#   tag_branch:
+#     name: Publish version tag
+#     runs-on: ubuntu-latest
+#     timeout-minutes: 5
+#     steps:
+#       - name: Checkout changes
+#         uses: actions/checkout@v2
 
-      - name: Set CUR_VERSION
-        run: |
-          sudo apt-get install python3-setuptools
-          pip3 install -r packages/utils/yaml_get/requirements.txt
-          export GET_BIN=packages/utils/yaml_get/yaml_get.py
-          export GET_KEY=global.version
-          echo "##[set-env name=CUR_VERSION;]$($GET_BIN $GET_KEY)"
+#       - name: Set CUR_VERSION
+#         run: |
+#           sudo apt-get install python3-setuptools
+#           pip3 install -r packages/utils/yaml_get/requirements.txt
+#           export GET_BIN=packages/utils/yaml_get/yaml_get.py
+#           export GET_KEY=global.version
+#           echo "##[set-env name=CUR_VERSION;]$($GET_BIN $GET_KEY)"
 
-      - name: Push version tag
-        uses: anothrNick/github-tag-action@1.17.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: "v${{ env.CUR_VERSION }}"
+#       - name: Push version tag
+#         uses: anothrNick/github-tag-action@1.17.2
+#         env:
+#           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#           CUSTOM_TAG: "v${{ env.CUR_VERSION }}"

@@ -1,0 +1,59 @@
+---
+name: Generate changelog
+on:
+  pull_request:
+
+jobs:
+  publish:
+    name: Generate changelog
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Retrieve changelog from Github PR body
+        run:
+            sudo apt-get install jq;
+            cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
+            cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+
+            if [[ -z $(cat /tmp/changelog) ]]; then
+                echo "[Error] empty changelog"; exit 1;
+            fi
+
+      - name: Lint changelog
+        run: |
+            echo -e "# First\n" > /tmp/changelog_lint
+            cat /tmp/changelog >> /tmp/changelog_lint
+            sudo npm install -g markdownlint-cli
+            markdownlint /tmp/changelog_lint
+
+      - name: Check changelog subsections
+        run:
+          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+
+          if [[ -z $(cat /tmp/changelog_nc |
+          sed -n '/^### Android Bridge/,/^### iOS Bridge/p' |
+          sed '1d;$d' | tr -d '[:space:]') ]]; then
+               echo "[Error] empty Android Bridge section"; exit 1;
+          fi;
+
+          if [[ -z $(cat /tmp/changelog_nc |
+          sed -n '/^### iOS Bridge/,/^### Golang Core/p' |
+          sed '1d;$d' | tr -d '[:space:]') ]]; then
+               echo "[Error] empty iOS Bridge section"; exit 1;
+          fi;
+          if [[ -z $(cat /tmp/changelog_nc |
+          sed -n '/^### Golang Core/,/^### Android Demo App/p' |
+          sed '1d;$d' | tr -d '[:space:]') ]]; then
+               echo "[Error] empty Golang Core section"; exit 1;
+          fi;
+
+          if [[ -z $(cat /tmp/changelog_nc |
+          sed -n '/^### Android Demo App/,/^### iOS Demo App/p' |
+          sed '1d;$d' | tr -d '[:space:]') ]]; then
+               echo "[Error] empty Android Demo App section"; exit 1;
+          fi;
+
+          if [[ -z $(cat /tmp/changelog_nc |
+          sed -e '1,/^### iOS Demo App/ d' | tr -d '[:space:]') ]]; then
+               echo "[Error] empty iOS Demo App section"; exit 1;
+          fi;
