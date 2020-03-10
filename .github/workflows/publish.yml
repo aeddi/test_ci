@@ -22,16 +22,16 @@ jobs:
 
       - name: Retrieve changelog from Github PR body
         run:
-            sudo apt-get install jq;
-            cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
-            cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+          sudo apt-get install jq;
+          cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
+          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
 
-            if [[ -z $(cat /tmp/changelog) ]]; then
-                echo "[Error] empty changelog"; exit 1;
-            fi
+          if [[ -z $(cat /tmp/changelog) ]]; then
+              echo "[Error] empty changelog"; exit 1;
+          fi
 
-            cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
-            echo "##[set-env name=CHANGELOG;]$(cat /tmp/changelog_nc)"
+          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+          echo "##[set-env name=CHANGELOG;]$(cat /tmp/changelog_nc)"
 
       - name: Create Release
         uses: actions/create-release@latest
@@ -87,19 +87,19 @@ jobs:
 
       - name: Retrieve changelog from Github PR body
         run:
-            sudo apt-get install jq;
-            cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
-            cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+          brew install jq;
+          cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
+          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
 
-            if [[ -z $(cat /tmp/changelog) ]]; then
-                echo "[Error] empty changelog"; exit 1;
-            fi
+          if [[ -z $(cat /tmp/changelog) ]]; then
+              echo "[Error] empty changelog"; exit 1;
+          fi
 
-            cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
 
       - name: Generate changelog
         run:
-          cp /tmp/changelog_nc packages/release_notes/changelog
+          cat /tmp/changelog_nc >> packages/release_notes/changelog
 
       - name: Push docs and changelog
         uses: github-actions-x/commit@v2.3
