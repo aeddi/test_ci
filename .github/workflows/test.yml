@@ -13,9 +13,7 @@ jobs:
         run: |
             sudo apt-get install jq
             export BODY=$(cat ${{ github.event_path }} | jq .pull_request.body)
-            echo -e "BODY:\n$BODY"
             export CLOG=$(echo -e "$BODY" | sed -ne '/## Changelog/,$ p')
-            echo -e "CLOG:\n$CLOG"
             if [[ -z "$CLOG" ]]; then echo "[Error] empty changelog"; exit 1; fi
             echo "##[set-env name=CHANGELOG;]$CLOG"
 
@@ -23,6 +21,8 @@ jobs:
         run: |
             sudo snap install mdl
             echo "$CHANGELOG" > /tmp/changelog
+            cat /tmp/changelog
+            hash -r
             markdownlint /tmp/changelog
 
       - name: Check changelog subsections
@@ -30,7 +30,7 @@ jobs:
           CHANGELOG_NC=$(echo -e "$CHANGELOG" | sed '/<!--/,/-->/d');
           echo "CHANGELOG_NC:\n$CHANGELOG_NC";
           if [[ -z $(echo -e "$CHANGELOG_NC" |
-          sed -n '/^### Android Bridge$/,/^### iOS Bridge$/p' |
+          sed -n '/### Android Bridge/,/### iOS Bridge/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Android Bridge section"; exit 1;
           fi;
