@@ -31,8 +31,6 @@ jobs:
         run:
           cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
 
-          cat /tmp/changelog_nc;
-
           if [[ -z $(cat /tmp/changelog_nc |
           sed -n '/^### Android Bridge$/,/^### iOS Bridge$/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
