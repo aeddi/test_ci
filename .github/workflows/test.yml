@@ -23,7 +23,6 @@ jobs:
         run: |
             echo -e "# First\n" > /tmp/changelog_lint
             cat /tmp/changelog >> /tmp/changelog_lint
-            echo "FIRST"; cat /tmp/changelog_lint; echo "LAST"
             sudo npm install -g markdownlint-cli
             markdownlint /tmp/changelog_lint
 
@@ -31,8 +30,10 @@ jobs:
         run:
           cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
 
+          cat /tmp/changelog_nc;
+
           if [[ -z $(cat /tmp/changelog_nc |
-          sed -n '/^### Android Bridge$/,/^### iOS Bridge$/p' |
+          sed -n '/^### Android Bridge/,/^### iOS Bridge/p' |
           sed '1d;$d' | tr -d '[:space:]') ]]; then
                echo "[Error] empty Android Bridge section"; exit 1;
           fi;
