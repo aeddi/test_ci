@@ -1,0 +1,44 @@
+---
+name: Release
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  tag_branch:
+    name: Publish version tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+
+      - name: Create Semantic Release tag
+        uses: codfish/semantic-release-action@master
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Retrieve changelog from Github PR body
+        run:
+          sudo apt-get install jq;
+          cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
+          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+
+          if [[ -z $(cat /tmp/changelog) ]]; then
+              echo "[Error] empty changelog"; exit 1;
+          fi
+
+          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+          echo "##[set-env name=CHANGELOG;]$(cat /tmp/changelog_nc)"
+
+      - name: Create Release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ steps.semantic.outputs.release-version }}
+          release_name:
+            Release v${{ steps.semantic.outputs.release-version }}
+          body: ${{ env.CHANGELOG }}
