@@ -14,10 +14,14 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
+      - name: Display event
+        run: cat ${{ github.event_path }}
+
       - name: Create tmp config file
         run: |
            printf "module.exports = {
-               branch: 'master',
+               dryRun: true,
+               skipTag: true,
                plugins: [
                    '@semantic-release/commit-analyzer',
                    '@semantic-release/release-notes-generator',
@@ -28,16 +32,10 @@ jobs:
       - name: Generate Semantic Release version
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
-        with:
-          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Display tag
-        if: steps.semantic.outputs.new_release_published == 'true'
-        run: echo ${{ steps.semantic.outputs.new_release_version }}
-
-      - name: Publish version tag
+      - name: Publish Semantic Release version tag
         if: steps.semantic.outputs.new_release_published == 'true'
         uses: anothrNick/github-tag-action@1.17.2
         env:
