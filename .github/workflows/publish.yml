@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout changes
         uses: actions/checkout@v2
-        with:
-            fetch-depth: 5
 
       - name: Install Go
         uses: actions/setup-go@v1
