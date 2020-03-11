@@ -16,7 +16,6 @@ jobs:
         with:
             fetch-depth: 5
 
-
       - name: Display event
         run:
             echo "SHA- $GITHUB_SHA";
