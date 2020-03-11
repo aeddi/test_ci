@@ -9,37 +9,17 @@ jobs:
   gen_docs:
     name: Generate docs and changelog
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 5
     steps:
       - name: Checkout changes
         uses: actions/checkout@v2
-        with:
-            fetch-depth: 5
 
-      - name: Display event
-        run:
-            echo "SHA- $GITHUB_SHA";
-            git log -n 5; echo; echo;
-            cat ${{ github.event_path }}
-
-      - name: Create tmp config file
+      - name: Set MERGE_SHA in env
         run: |
-           printf "module.exports = {
-               dryRun: true,
-               skipTag: true,
-               skipPrCheck: true,
-               plugins: [
-                   '@semantic-release/commit-analyzer',
-                   '@semantic-release/release-notes-generator',
-                   '@semantic-release/github',
-               ],
-            };" > .releaserc.js
-
-      - name: Generate Semantic Release version
-        uses: cycjimmy/semantic-release-action@v2
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          export SHA=$(git log -1 | grep Merge | cut -d: -f2)
+          export SHA_TRIMED=$(echo $SHA | tr -d '[:space:]')
+          echo "##[set-env name=MERGE_SHA;]$SHA_TRIMED"
+          echo "$SHA_TRIMED"
 
       - name: Retrieve changelog from Github PR body
         if: steps.semantic.outputs.new_release_published == 'true'
@@ -55,9 +35,8 @@ jobs:
           cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
 
       - name: Upload changelog artifact
-        if: steps.semantic.outputs.new_release_published == 'true'
         uses: actions/upload-artifact@v1
         with:
-          name: changelog-v${{ steps.semantic.outputs.new_release_version }}
+          name: changelog-v${{ env.MERGE_SHA }}
           path: /tmp/changelog_nc
 
