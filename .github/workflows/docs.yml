@@ -16,6 +16,9 @@ jobs:
         run: |
            printf "module.exports = {
                branch: 'master',
+               dryRun: true,
+               skipTag: true,
+               skipPrCheck: true,
                plugins: [
                    '@semantic-release/commit-analyzer',
                    '@semantic-release/release-notes-generator',
@@ -26,8 +29,6 @@ jobs:
       - name: Generate Semantic Release version
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
-        with:
-          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
