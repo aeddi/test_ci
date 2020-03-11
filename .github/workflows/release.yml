@@ -14,19 +14,18 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
         with:
-            fetch-depth: 5
+          fetch-depth: 5
 
       - name: Display event
         run:
-            echo "SHA- $GITHUB_SHA";
-            git log -n 5; echo; echo;
-            cat ${{ github.event_path }}
+          echo "SHA- $GITHUB_SHA";
+          git log -n 5; echo; echo;
+          cat ${{ github.event_path }}
 
       - name: Create tmp config file
         run: |
            printf "module.exports = {
                dryRun: true,
-               skipTag: true,
                plugins: [
                    '@semantic-release/commit-analyzer',
                    '@semantic-release/release-notes-generator',

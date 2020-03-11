@@ -2,8 +2,8 @@
 name: Docs
 on:
   pull_request:
-      branches:
-        - master
+    branches:
+      - master
 
 jobs:
   gen_docs:
@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout changes
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
 
       - name: Set MERGE_SHA in env
         run: |
@@ -21,21 +23,25 @@ jobs:
           echo "$SHA"
 
       - name: Retrieve changelog from Github PR body
-        if: steps.semantic.outputs.new_release_published == 'true'
         run:
-          sudo apt-get install jq;
+          sudo apt-get install jq dos2unix;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
-          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+          cat /tmp/body | dos2unix | awk '/^## Changelog$/{p=1;next}p'
+          > /tmp/changelog;
 
           if [[ -z $(cat /tmp/changelog) ]]; then
               echo "[Error] empty changelog"; exit 1;
           fi
 
-          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+      - name: Format changelog
+        run:
+          cat /tmp/changelog | sed '/<!--/,/-->/d' |
+          awk '!NF {if (++n <= 1) print; next}; {n=0;print}' |
+          sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}'
+          > /tmp/changelog_formated;
 
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v1
         with:
-          name: changelog-v${{ env.MERGE_SHA }}
-          path: /tmp/changelog_nc
-
+          name: changelog-${{ env.MERGE_SHA }}
+          path: /tmp/changelog_formated
