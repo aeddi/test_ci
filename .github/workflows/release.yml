@@ -14,11 +14,19 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
-      - name: Create Semantic Release tag
-        uses: codfish/semantic-release-action@master
+      - name: Generate Semantic Release version
+        uses: cycjimmy/semantic-release-action@v2
         id: semantic
+        with:
+          dry_run: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish version tag
+        uses: anothrNick/github-tag-action@1.17.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_TAG: ${{ steps.semantic.outputs.new_release_version }}
 
       - name: Retrieve changelog from Github PR body
         run:
@@ -38,7 +46,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: v${{ steps.semantic.outputs.release-version }}
+          tag_name: v${{ steps.semantic.outputs.new_release_version }}
           release_name:
-            Release v${{ steps.semantic.outputs.release-version }}
+            Release v${{ steps.semantic.outputs.new_release_version }}
           body: ${{ env.CHANGELOG }}
