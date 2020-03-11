@@ -14,6 +14,9 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
+      - name: Create tmp config file
+        run: cp packages/.releaserc.js .
+
       - name: Generate Semantic Release version
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
