@@ -39,14 +39,16 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Cat changelog
-        if: steps.semantic.outputs.new_release_published == 'true'
+      - name: Commit docs and changelog
         run: |
-            cat CHANGELOG.md
-            echo ${{ steps.semantic.outputs.new_release_version }}
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add CHANGELOG.md
+          git commit -m "docs: add generated docs and changelog"
 
       - name: Push docs and changelog
-        uses: stefanzweifel/git-auto-commit-action@v4.1.0
+        uses: ad-m/github-push-action@master
         with:
-          commit-message: 'docs: add generated docs and changelog'
-          file_pattern: CHANGELOG.md
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          uses: stefanzweifel/git-auto-commit-action@v4.1.0
+          with:
