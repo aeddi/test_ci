@@ -37,6 +37,8 @@ jobs:
           dry_run: true
           extra_plugins: |
             @semantic-release/changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Display Changelog and version
         run: |
@@ -61,3 +63,5 @@ jobs:
         with:
           extra_plugins: |
             @semantic-release/changelog
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
