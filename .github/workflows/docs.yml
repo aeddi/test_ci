@@ -2,6 +2,8 @@
 name: Docs
 on:
   pull_request:
+      branches:
+        - master
 
 jobs:
   gen_docs:
@@ -12,8 +14,11 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
+
       - name: Display event
-        run: cat ${{ github.event_path }}
+        run:
+            echo "SHA- $GITHUB_SHA"
+            cat ${{ github.event_path }}
 
       - name: Create tmp config file
         run: |
