@@ -105,6 +105,7 @@ jobs:
 
       - name: Generate docs
         run: |
+          gem install jazzy
           rm -rf docs
           cd packages && make docgen
 

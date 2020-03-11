@@ -33,7 +33,7 @@ try:
     if "GOMOBILE_IPFS_VERSION" in os.environ:
         global_version = os.getenv("GOMOBILE_IPFS_VERSION")
     else:
-        global_version = "dev"
+        global_version = "0.0.0" #dev
 
     # Check if ANDROID_HOME is set in env
     if "ANDROID_HOME" not in os.environ:
