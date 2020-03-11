@@ -1,0 +1,54 @@
+---
+name: Docs
+on:
+  pull_request:
+
+jobs:
+  gen_docs:
+    name: Generate docs and changelog
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+
+      - name: Create tmp config file
+        run: |
+           printf "module.exports = {
+               branch: 'master',
+               plugins: [
+                   '@semantic-release/commit-analyzer',
+                   '@semantic-release/release-notes-generator',
+                   '@semantic-release/github',
+               ],
+            };" > .releaserc.js
+
+      - name: Generate Semantic Release version
+        uses: cycjimmy/semantic-release-action@v2
+        id: semantic
+        with:
+          dry_run: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Retrieve changelog from Github PR body
+        if: steps.semantic.outputs.new_release_published == 'true'
+        run:
+          cat ${{ github.event_path }}
+          sudo apt-get install jq;
+          cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
+          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+
+          if [[ -z $(cat /tmp/changelog) ]]; then
+              echo "[Error] empty changelog"; exit 1;
+          fi
+
+          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+
+      - name: Upload changelog artifact
+        if: steps.semantic.outputs.new_release_published == 'true'
+        uses: actions/upload-artifact@v1
+        with:
+          name: changelog-v${{ steps.semantic.outputs.new_release_version }}
+          path: /tmp/changelog_nc
+
