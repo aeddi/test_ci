@@ -18,6 +18,7 @@ jobs:
 
       - name: Display event
         run:
+            echo "SHA- $GITHUB_SHA";
             git log -n 5; echo; echo;
             cat ${{ github.event_path }}
 
