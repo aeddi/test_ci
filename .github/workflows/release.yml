@@ -23,9 +23,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Display tag
+        if: steps.semantic.outputs.new_release_published == 'true'
         run: echo ${{ steps.semantic.outputs.new_release_version }}
 
       - name: Publish version tag
+        if: steps.semantic.outputs.new_release_published == 'true'
         uses: anothrNick/github-tag-action@1.17.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
