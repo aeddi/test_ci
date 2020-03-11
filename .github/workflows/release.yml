@@ -27,9 +27,9 @@ jobs:
                        'changelogFile': 'CHANGELOG.md',
                        'changelogTitle': 'Global Changelog',
                    }],
-                   ["@semantic-release/git", {
-                      "assets": ["CHANGELOG.md"],
-                      "message": "docs: add generated docs and changelog"
+                   ['@semantic-release/git', {
+                      'assets': ['CHANGELOG.md'],
+                      'message': 'docs: add generated docs and changelog'
                    }],
                ],
             };" > .releaserc.js
