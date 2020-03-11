@@ -46,9 +46,7 @@ jobs:
             echo ${{ steps.semantic.outputs.new_release_version }}
 
       - name: Push docs and changelog
-        uses: github-actions-x/commit@v2.3
+        uses: stefanzweifel/git-auto-commit-action@v4.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          push-branch: master
-          commit-message: 'docs: generate docs and changelog'
-          files: CHANGELOG.md
+          commit-message: 'docs: add generated docs and changelog'
+          file_pattern: CHANGELOG.md
