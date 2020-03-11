@@ -24,7 +24,7 @@ jobs:
 
       - name: Retrieve changelog from Github PR body
         run:
-          sudo apt-get install jq;
+          sudo apt-get install jq dos2unix;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
           cat /tmp/body | sed -ne '/^## Changelog/,$ p'
           > /tmp/changel;
