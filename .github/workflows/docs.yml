@@ -12,6 +12,9 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
+      - name: Display event
+        run: cat ${{ github.event_path }}
+
       - name: Create tmp config file
         run: |
            printf "module.exports = {
@@ -34,7 +37,6 @@ jobs:
       - name: Retrieve changelog from Github PR body
         if: steps.semantic.outputs.new_release_published == 'true'
         run:
-          cat ${{ github.event_path }}
           sudo apt-get install jq;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
           cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
