@@ -36,10 +36,13 @@ jobs:
         run:
           cat /tmp/changelog | sed '/<!--/,/-->/d' |
           awk '!NF {if (++n <= 1) print; next}; {n=0;print}' |
-          sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' > /tmp/changelog;
+          sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}'
+          > /tmp/changelog_formated;
+
+          cat /tmp/changelog_formated
 
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v1
         with:
           name: changelog-${{ env.MERGE_SHA }}
-          path: /tmp/changelog
+          path: /tmp/changelog_formated
