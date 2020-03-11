@@ -33,6 +33,9 @@ jobs:
       - name: Generate Semantic Release version
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
