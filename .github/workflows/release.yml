@@ -40,38 +40,15 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Cat changelog
-        run: cat CHANGELOG.md
+        if: steps.semantic.outputs.new_release_published == 'true'
+        run: |
+            cat CHANGELOG.md
+            echo ${{ steps.semantic.outputs.new_release_version }}
 
-      # - name: Publish Semantic Release version tag
-      #   if: steps.semantic.outputs.new_release_published == 'true'
-      #   uses: anothrNick/github-tag-action@1.17.2
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #     CUSTOM_TAG: v${{ steps.semantic.outputs.new_release_version }}
-
-      # - name: Set MERGE_SHA in env
-      #   if: steps.semantic.outputs.new_release_published == 'true'
-      #   run: |
-      #     export SHA=$(git log --pretty=format:'%p' -1 | tr -d '[:space:]')
-      #     echo "##[set-env name=MERGE_SHA;]$SHA"
-      #     echo "$SHA"
-
-      # - name: Download changelog artifact
-      #   if: steps.semantic.outputs.new_release_published == 'true'
-      #   uses: actions/download-artifact@v1
-      #   with:
-      #     name: changelog-${{ env.MERGE_SHA }}
-      #     path: /tmp/changelog_formated
-
-      # - name: Set CHANGELOG in env
-      #   run: echo "##[set-env name=CHANGELOG;]$(cat /tmp/changelog_formated)"
-
-      # - name: Create Release
-      #   uses: actions/create-release@latest
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: v${{ steps.semantic.outputs.new_release_version }}
-      #     release_name:
-      #       Release v${{ steps.semantic.outputs.new_release_version }}
-      #     body: ${{ env.CHANGELOG }}
+      - name: Push docs and changelog
+        uses: github-actions-x/commit@v2.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: master
+          commit-message: 'docs: generate docs and changelog'
+          files: CHANGELOG.md
