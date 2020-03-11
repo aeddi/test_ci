@@ -18,7 +18,6 @@ jobs:
 
       - name: Set MERGE_SHA in env
         run: |
-          git log --pretty=format:'%p' -1
           export SHA=$(git log --pretty=format:'%p' -1 | tr -d '[:space:]')
           echo "##[set-env name=MERGE_SHA;]$SHA"
           echo "$SHA"
@@ -33,11 +32,14 @@ jobs:
               echo "[Error] empty changelog"; exit 1;
           fi
 
-          cat /tmp/changelog | sed '/<!--/,/-->/d' > /tmp/changelog_nc;
+      - name: Format changelog
+          cat /tmp/changelog | sed '/<!--/,/-->/d' |
+          awk '!NF {if (++n <= 1) print; next}; {n=0;print}' |
+          sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' > /tmp/changelog;
 
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v1
         with:
-          name: changelog-v${{ env.MERGE_SHA }}
-          path: /tmp/changelog_nc
+          name: changelog-${{ env.MERGE_SHA }}
+          path: /tmp/changelog
 

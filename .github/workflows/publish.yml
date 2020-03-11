@@ -83,12 +83,17 @@ jobs:
       - name: Download changelog artifact
         uses: actions/download-artifact@v1
         with:
-          name: changelog-v${{ env.MERGE_SHA }}
-          path: /tmp/changelog_nc
+          name: changelog-${{ env.MERGE_SHA }}
+          path: /tmp/changelog
 
       - name: Generate changelog
         run:
-          cat /tmp/changelog_nc >> packages/release_notes/changelog
+          cat packages/release_notes/changelog | tail -n +2 |
+          sed -e '/./,$!d' > /tmp/prev_changelog;
+          printf '# Changelog\n' > packages/release_notes/changelog;
+          printf "## ${{ github.ref }}\n" >> packages/release_notes/changelog;
+          cat /tmp/changelog /tmp/prev_changelog >>
+          packages/release_notes/changelog
 
       - name: Push docs and changelog
         uses: github-actions-x/commit@v2.3
