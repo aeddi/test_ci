@@ -39,12 +39,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish Semantic Release version tag
-        if: steps.semantic.outputs.new_release_published == 'true'
-        uses: anothrNick/github-tag-action@1.17.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: v${{ steps.semantic.outputs.new_release_version }}
+      # - name: Publish Semantic Release version tag
+      #   if: steps.semantic.outputs.new_release_published == 'true'
+      #   uses: anothrNick/github-tag-action@1.17.2
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #     CUSTOM_TAG: v${{ steps.semantic.outputs.new_release_version }}
 
 #       - name: Retrieve changelog from Github PR body
 #         run:
