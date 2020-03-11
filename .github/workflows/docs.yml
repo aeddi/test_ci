@@ -16,12 +16,12 @@ jobs:
 
       - name: Set MERGE_SHA in env
         run: |
+          git log --pretty=format:'%p' -1
           export SHA=$(git log --pretty=format:'%p' -1 | tr -d '[:space:]')
           echo "##[set-env name=MERGE_SHA;]$SHA"
           echo "$SHA"
 
       - name: Retrieve changelog from Github PR body
-        if: steps.semantic.outputs.new_release_published == 'true'
         run:
           sudo apt-get install jq;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
