@@ -16,20 +16,17 @@ jobs:
         with:
           fetch-depth: 5
 
-      - name: Display event
-        run:
-          echo "SHA- $GITHUB_SHA";
-          git log -n 5; echo; echo;
-          cat ${{ github.event_path }}
-
       - name: Create tmp config file
         run: |
            printf "module.exports = {
-               dryRun: true,
                plugins: [
                    '@semantic-release/commit-analyzer',
                    '@semantic-release/release-notes-generator',
                    '@semantic-release/github',
+                   ['@semantic-release/changelog', {
+                       'changelogFile': 'CHANGELOG.md',
+                       'changelogTitle': 'Global Changelog',
+                   }],
                ],
             };" > .releaserc.js
 
@@ -39,6 +36,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Cat changelog
+        run: cat CHANGELOG.md
+
       # - name: Publish Semantic Release version tag
       #   if: steps.semantic.outputs.new_release_published == 'true'
       #   uses: anothrNick/github-tag-action@1.17.2
@@ -46,29 +46,29 @@ jobs:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       #     CUSTOM_TAG: v${{ steps.semantic.outputs.new_release_version }}
 
-      - name: Set MERGE_SHA in env
-        if: steps.semantic.outputs.new_release_published == 'true'
-        run: |
-          export SHA=$(git log --pretty=format:'%p' -1 | tr -d '[:space:]')
-          echo "##[set-env name=MERGE_SHA;]$SHA"
-          echo "$SHA"
+      # - name: Set MERGE_SHA in env
+      #   if: steps.semantic.outputs.new_release_published == 'true'
+      #   run: |
+      #     export SHA=$(git log --pretty=format:'%p' -1 | tr -d '[:space:]')
+      #     echo "##[set-env name=MERGE_SHA;]$SHA"
+      #     echo "$SHA"
 
-      - name: Download changelog artifact
-        if: steps.semantic.outputs.new_release_published == 'true'
-        uses: actions/download-artifact@v1
-        with:
-          name: changelog-${{ env.MERGE_SHA }}
-          path: /tmp/changelog_formated
+      # - name: Download changelog artifact
+      #   if: steps.semantic.outputs.new_release_published == 'true'
+      #   uses: actions/download-artifact@v1
+      #   with:
+      #     name: changelog-${{ env.MERGE_SHA }}
+      #     path: /tmp/changelog_formated
 
-      - name: Set CHANGELOG in env
-        run: echo "##[set-env name=CHANGELOG;]$(cat /tmp/changelog_formated)"
+      # - name: Set CHANGELOG in env
+      #   run: echo "##[set-env name=CHANGELOG;]$(cat /tmp/changelog_formated)"
 
-      - name: Create Release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ steps.semantic.outputs.new_release_version }}
-          release_name:
-            Release v${{ steps.semantic.outputs.new_release_version }}
-          body: ${{ env.CHANGELOG }}
+      # - name: Create Release
+      #   uses: actions/create-release@latest
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: v${{ steps.semantic.outputs.new_release_version }}
+      #     release_name:
+      #       Release v${{ steps.semantic.outputs.new_release_version }}
+      #     body: ${{ env.CHANGELOG }}
