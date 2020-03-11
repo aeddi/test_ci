@@ -26,10 +26,11 @@ jobs:
         uses: anothrNick/github-tag-action@1.17.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CUSTOM_TAG: ${{ steps.semantic.outputs.new_release_version }}
+          CUSTOM_TAG: v${{ steps.semantic.outputs.new_release_version }}
 
       - name: Retrieve changelog from Github PR body
         run:
+          cat ${{ github.event_path }}
           sudo apt-get install jq;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
           cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
