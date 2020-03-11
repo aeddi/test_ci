@@ -15,7 +15,6 @@ jobs:
       - name: Create tmp config file
         run: |
            printf "module.exports = {
-               branch: 'master',
                dryRun: true,
                skipTag: true,
                skipPrCheck: true,
