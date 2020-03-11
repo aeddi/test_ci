@@ -26,8 +26,11 @@ jobs:
         run:
           sudo apt-get install jq;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
-          cat /tmp/body | dos2unix | sed -ne '/^## Changelog/,$ p'
-          > /tmp/changelog;
+          cat /tmp/body | sed -ne '/^## Changelog/,$ p'
+          > /tmp/changel;
+
+          cat /tmp/changel;
+          cat /tmp/changel | dos2unix > /tmp/changelog;
 
           if [[ -z $(cat /tmp/changelog) ]]; then
               echo "[Error] empty changelog"; exit 1;
