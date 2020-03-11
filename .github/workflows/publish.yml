@@ -74,10 +74,9 @@ jobs:
 
       - name: Set MERGE_SHA in env
         run: |
-          export SHA=$(git log -1 | grep Merge | cut -d: -f2)
-          export SHA_TRIMED=$(echo $SHA | tr -d '[:space:]')
-          echo "##[set-env name=MERGE_SHA;]$SHA_TRIMED"
-          echo "$SHA_TRIMED"
+          export SHA=$(git log --pretty=format:'%p' -1 | tr -d '[:space:]')
+          echo "##[set-env name=MERGE_SHA;]$SHA"
+          echo "$SHA"
 
       - name: Download changelog artifact
         uses: actions/download-artifact@v1
