@@ -163,7 +163,7 @@ jobs:
         run: ./bin/golangci-lint run -D unused
 
   lint_changelog:
-    name: Lint changelog
+    name: Lint Changelog
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
