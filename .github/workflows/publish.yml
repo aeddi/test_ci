@@ -14,18 +14,6 @@ jobs:
       - name: Checkout changes
         uses: actions/checkout@v2
 
-      - name: Retrieve changelog from Github PR body
-        run:
-          sudo apt-get install jq;
-          cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
-          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
-
-          if [[ -z $(cat /tmp/changelog) ]]; then
-              echo "[Error] empty changelog"; exit 1;
-          fi
-
-          cat /tmp/changelog | sed '/<!--/,/-->/d' >
-
       # - name: Install Go
       #   uses: actions/setup-go@v1
       #   with:
