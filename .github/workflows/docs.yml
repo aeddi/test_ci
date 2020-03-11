@@ -26,7 +26,8 @@ jobs:
         run:
           sudo apt-get install jq;
           cat ${{ github.event_path }} | jq -r .pull_request.body > /tmp/body;
-          cat /tmp/body | sed -ne '/^## Changelog/,$ p' > /tmp/changelog;
+          cat /tmp/body | dos2unix | sed -ne '/^## Changelog/,$ p'
+          > /tmp/changelog;
 
           if [[ -z $(cat /tmp/changelog) ]]; then
               echo "[Error] empty changelog"; exit 1;
@@ -38,8 +39,6 @@ jobs:
           awk '!NF {if (++n <= 1) print; next}; {n=0;print}' |
           sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}'
           > /tmp/changelog_formated;
-
-          cat /tmp/changelog_formated
 
       - name: Upload changelog artifact
         uses: actions/upload-artifact@v1
