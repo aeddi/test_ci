@@ -33,6 +33,7 @@ jobs:
           fi
 
       - name: Format changelog
+        run:
           cat /tmp/changelog | sed '/<!--/,/-->/d' |
           awk '!NF {if (++n <= 1) print; next}; {n=0;print}' |
           sed -e '/./,$!d' -e :a -e '/^\n*$/{$d;N;ba' -e '}' > /tmp/changelog;

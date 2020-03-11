@@ -178,10 +178,13 @@ jobs:
           fi
 
       - name: Lint changelog
-        run: |
-          echo -e "# First\n" > /tmp/changelog_lint
-          cat /tmp/changelog >> /tmp/changelog_lint
-          sudo npm install -g markdownlint-cli
+        run:
+          echo -e "# First\n" > /tmp/changelog_lint;
+          cat /tmp/changelog >> /tmp/changelog_lint;
+          cat /tmp/changelog_lint |
+          awk '!NF {if (++n <= 1) print; next}; {n=0;print}'
+          > /tmp/changelog_lint;
+          sudo npm install -g markdownlint-cli;
           markdownlint /tmp/changelog_lint
 
       - name: Check if the changelog subsections are empty
