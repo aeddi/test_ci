@@ -7,7 +7,7 @@ on:
 
 jobs:
   tag_branch:
-    name: Publish version tag
+    name: Create Github release
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
@@ -34,10 +34,14 @@ jobs:
         uses: cycjimmy/semantic-release-action@v2
         id: semantic
         with:
+          dry_run: true
           extra_plugins: |
             @semantic-release/changelog
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Display Changelog and version
+        run: |
+          cat CHANGELOG.md
+          echo ${{ steps.semantic.outputs.new_release_version }}
 
       - name: Commit docs and changelog
         run: |
@@ -51,4 +55,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           uses: stefanzweifel/git-auto-commit-action@v4.1.0
-          with:
+
+      - name: Generate Semantic Release version
+        uses: cycjimmy/semantic-release-action@v2
+        with:
+          extra_plugins: |
+            @semantic-release/changelog
