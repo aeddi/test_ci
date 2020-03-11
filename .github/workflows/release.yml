@@ -15,7 +15,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Display event
-        run: cat ${{ github.event_path }}
+        run:
+            echo "SHA- $GITHUB_SHA"
+            cat ${{ github.event_path }}
 
       - name: Create tmp config file
         run: |
