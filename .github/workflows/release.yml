@@ -56,7 +56,6 @@ jobs:
 
       - name: Display Changelog and version always
         run: |
-          ls -l node_modules
           echo ${{ steps.semantic.outputs.new_release_version }}
           echo "LOL"
           echo "LOL"
