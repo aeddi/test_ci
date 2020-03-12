@@ -34,6 +34,7 @@ jobs:
 
       - name: Create Semantic Release version
         uses: cycjimmy/semantic-release-action@v2
+        id: semantic
         with:
           dry_run: true
           extra_plugins: |
@@ -47,6 +48,11 @@ jobs:
         run: |
           echo ${{ steps.semantic.outputs.new_release_version }}
           cat CHANGELOG.md
+          echo "LOL"
+          echo "LOL"
+          echo "LOL"
+          echo "LOL"
+          echo ${{steps.semantic.outputs}}
 
       - name: Display Changelog and version always
         run: |
