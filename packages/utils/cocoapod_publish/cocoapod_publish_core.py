@@ -52,7 +52,7 @@ try:
     if "GOMOBILE_IPFS_VERSION" in os.environ:
         global_version = os.getenv("GOMOBILE_IPFS_VERSION")
     else:
-        global_version = "0.0.0"  # dev
+        global_version = "0.0.42-dev"
 
     # Check if remote package already exists
     package = bintray.search_package(

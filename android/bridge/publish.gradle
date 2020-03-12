@@ -1,4 +1,5 @@
 task javadoc(type: Javadoc) {
+	title = manifest.android_bridge.name
     source = android.sourceSets.main.java.srcDirs
     destinationDir = new File("$projectDir/javadoc")
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
