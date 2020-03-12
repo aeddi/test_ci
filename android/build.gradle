@@ -15,7 +15,7 @@ task importManifest {
 
     rootProject.ext {
         manifest = new org.yaml.snakeyaml.Yaml().load(ManifestFile.newInputStream())
-		version = (EnvVersion != null) ? EnvVersion : '0.0.0' // dev
+		version = (EnvVersion != null) ? EnvVersion : '0.0.42-dev' // dev
     }
 }
 
