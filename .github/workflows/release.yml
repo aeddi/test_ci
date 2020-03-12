@@ -8,7 +8,7 @@ on:
 jobs:
   tag_branch:
     name: Create Github release
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout changes
@@ -56,6 +56,7 @@ jobs:
 
       - name: Display Changelog and version always
         run: |
+          ls -l node_modules
           echo ${{ steps.semantic.outputs.new_release_version }}
           echo "LOL"
           echo "LOL"
