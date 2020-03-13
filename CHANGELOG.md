@@ -1,3 +1,14 @@
+# Global Changelog
+
+# [0.10.0](https://github.com/aeddi/test_ci/compare/v0.9.0...v0.10.0) (2020-03-13)
+
+
+### Features
+
+* ci fix lol ([5bf706d](https://github.com/aeddi/test_ci/commit/5bf706d8d2264364a971034eab5b54a9e91b9f67))
+* ci fix lol ([7991983](https://github.com/aeddi/test_ci/commit/79919839d81b00df62ae5d026b4a5331f3541c36))
+* ci fix lol ([c12a6e1](https://github.com/aeddi/test_ci/commit/c12a6e1b80af0d772184ee8bd21487413080e265))
+
 Global Changelog
 
 # [0.9.0](https://github.com/aeddi/test_ci/compare/v0.8.0...v0.9.0) (2020-03-12)
