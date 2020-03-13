@@ -31,7 +31,7 @@ jobs:
                    '@semantic-release/github',
                    ['@semantic-release/changelog', {
                        'changelogFile': 'CHANGELOG.md',
-                       'changelogTitle': 'Global Changelog',
+                       'changelogTitle': '# Global Changelog',
                    }],
                    ['@semantic-release/git', {
                       'assets': ['CHANGELOG.md', 'docs'],
@@ -124,5 +124,5 @@ jobs:
           BINTRAY_KEY: ${{ secrets.BINTRAY_KEY }}
           BINTRAY_GPG_PASS: ${{ secrets.BINTRAY_GPG_PASS }}
           GOMOBILE_IPFS_VERSION:
-              ${{ steps.semantic.outputs.new_release_version }}
+            ${{ steps.semantic.outputs.new_release_version }}
         run: make publish

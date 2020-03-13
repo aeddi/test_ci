@@ -31,6 +31,7 @@ jobs:
         uses: nosborn/github-action-markdown-cli@v1.1.1
         with:
           files: .
+          ignore_files: CHANGELOG.md
 
   lint_yaml:
     name: Lint Yaml
