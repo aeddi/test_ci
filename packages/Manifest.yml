@@ -6,6 +6,8 @@ global:
     git_url: https://github.com/ipfs-shipyard/gomobile-ipfs.git
     issues_url: https://github.com/ipfs-shipyard/gomobile-ipfs/issues
 
+  changelog: &global_changelog CHANGELOG.md
+
   licenses:
     - name: The Apache Software License, Version 2.0
       short_name: Apache-2.0
@@ -66,7 +68,7 @@ go_core:
     override: false
     publish: true
     public_download_numbers: true
-    github_release_notes_file: packages/release_notes/go_core.md
+    github_release_notes_file: *global_changelog
     readme_syntax:  # markdown || asciidoc || plain_text
     readme_content:
 
@@ -80,7 +82,7 @@ go_core:
     override: false
     publish: true
     public_download_numbers: true
-    github_release_notes_file: packages/release_notes/go_core.md
+    github_release_notes_file: *global_changelog
     readme_syntax:  # markdown || asciidoc || plain_text
     readme_content:
 
@@ -94,7 +96,7 @@ android_bridge:
   override: false
   publish: true
   public_download_numbers: true
-  github_release_notes_file: packages/release_notes/android_bridge.md
+  github_release_notes_file: *global_changelog
 
 ios_bridge:
   swift_version: 5.0
@@ -109,7 +111,7 @@ ios_bridge:
   override: false
   publish: true
   public_download_numbers: true
-  github_release_notes_file: packages/release_notes/ios_bridge.md
+  github_release_notes_file: *global_changelog
   readme_syntax:  # markdown || asciidoc || plain_text
   readme_content:
 

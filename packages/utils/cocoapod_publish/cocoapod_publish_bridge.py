@@ -48,11 +48,11 @@ try:
     publish = manifest["ios_bridge"]["publish"]
     override = manifest["ios_bridge"]["override"]
 
-    # Get version from env (CI) or set to dev
+    # Get version from env (CI) or fail
     if "GOMOBILE_IPFS_VERSION" in os.environ:
         global_version = os.getenv("GOMOBILE_IPFS_VERSION")
     else:
-        global_version = "0.0.42-dev"
+        raise Exception("can't publish a dev version")
 
     # Check if remote package already exists
     package = bintray.search_package(
